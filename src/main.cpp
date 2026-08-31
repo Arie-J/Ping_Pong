@@ -11,27 +11,31 @@ int main()
 	//Generating a Render Window
 	sf::RenderWindow window(sf::VideoMode({800,600}),"Hello World!",sf::Style::Default);
 	window.setVerticalSyncEnabled(true);  
+	int windowWidth {static_cast<int>(window.getSize().x)};
+	int windowHeight {static_cast<int>(window.getSize().y)};
+	std::cout << windowWidth << "\n";
 
 	//GameStates Control(Initializing a enum for managing Game states)
-	GameStates gameState {GameStates::Playing};
+	GameStates gameState {GameStates::MainMenu};
 
 	//Create Objects other game Variables here for initialisation and set their initial values.
 	PlayerBar P1{};
-	auto playerSpeed = 500;
+	auto playerSpeed = 500; //500 pixels per second
 
-	PlayerBar O1{10.f,150.f,true};
-	O1.moveToPositon(700.f,300.f);
-	auto opponentSpeed = 5000000.f;
+	PlayerBar O1{10.f,150.f,true,800.f}; //height of Opponent(O1) is 10 pixels and width is 150 pixels.
+	O1.moveToPositon(windowWidth - 100,windowHeight/2); //Center of the paddle is given.
+	auto opponentSpeed = 300.f; //300 pixels per second
 
-	PlayerBar M1{600.f,10.f,false};
-	M1.moveToPositon(400.f,5.f);
+	PlayerBar M1{600.f,10.f,false};//size of unmoving map obstacle is 600 width and 10 height
+	M1.moveToPositon(windowWidth/2,0.f);//center of obstacle
 
-	PlayerBar M2{600.f,10.f,false};
-	M2.moveToPositon(400.f,595.f);
+	PlayerBar M2{600.f,10.f,false};//size of unmoving map obstacle is 600 width and 10 height
+	M2.moveToPositon(windowWidth/2,windowHeight);//center of obstacle
 
-	Ball b1{10.f,{800,600}};
-	b1.giveVelocity({400.f,300.f});
+	Ball b1{10.f,{windowWidth,windowHeight}}; //radius of ball is 10 pixels and is present at center of screen, the second argument takes window size.
+	b1.giveVelocity({400.f,300.f}); //Velocity is set with magnitude 500 as constant.
 
+	//loading some fonts.
 	sf::Font font1;
     if (!font1.openFromFile("../../resources/FastelarDemoRegular.ttf")) 
     {
@@ -45,6 +49,7 @@ int main()
         return -1;
     }
 
+	//Various Menus have been made using texts. 
 	MenuText pauseScreen{font1,"PAUSED",150,{400.f,220.f}};
 	pauseScreen.createText();
 
@@ -57,11 +62,30 @@ int main()
 	MenuText scoreCounter(font1,"0",100,{400.f,60.f});
 	scoreCounter.createText();
 	scoreCounter.setAlpha(100);
-	int score {0};
+	int score {0}; // This is a score that can be negative. The ball object carries the real score value in m_score member.
 
+	MenuText gameOverTxt1{font1,"GAME OVER!",150,{400.f,240.f}};
+	gameOverTxt1.createText();
+
+	MenuText gameOverTxt2{font1,"SCORE:",80,{365.f,350.f}};
+	gameOverTxt2.createText();
+
+	MenuText gameOverTxt3Counter{font1,"0",80,{498.f,350.f}};
+	gameOverTxt3Counter.createText();
+
+	MenuText gameOverTxt4{font1,"Press Enter To Continue...",30,{400.f,450.f}};
+	gameOverTxt4.createText();
+
+	MenuText mainMenuTxt1{font1,"Ping Pong",150,{400.f,240.f}};
+	mainMenuTxt1.createText();
+
+	MenuText mainMenuTxt2{font1,"Press Enter to Play",80,{400.f,370.f}};
+	mainMenuTxt2.createText();
+
+	//clocks for deltaTime. (Decoupling the physics from the processor speed using deltaTime)
 	sf::Clock clock;
-	sf::Clock unpauseTimer;
-	bool hasUnpaused{false};
+	sf::Clock unpauseTimer; // Cooldown timer after unpausing to smoothen the transition
+	bool hasUnpaused{false}; //state variable for the cooldown
 
 	while (window.isOpen())
 	{
@@ -84,6 +108,11 @@ int main()
 					if(keyPressed->scancode == sf::Keyboard::Scancode::Enter)
 					{
 						gameState = GameStates::Playing;
+						//reset the ball to initial condition.
+						score = 0;
+						b1.resetScore();
+						b1.giveVelocity({400.f,300.f});
+						b1.setPosition(windowWidth/2,windowHeight/2);
 					}
 					
 					break;
@@ -121,6 +150,10 @@ int main()
 					{
 						gameState = GameStates::MainMenu;
 					}
+					break;
+				}
+				case GameStates::Scored:
+				{
 					break;
 				}
 			}
@@ -175,6 +208,7 @@ int main()
 		}
 		case GameStates::GameOver:
 		{
+			gameOverTxt3Counter.setTextint(score);
 			break;
 		}
 		case GameStates::Scored:
@@ -205,6 +239,8 @@ int main()
 		}
 		case GameStates::MainMenu:
 		{
+			window.draw(mainMenuTxt1.getText());
+			window.draw(mainMenuTxt2.getText());
 			break;
 		}
 		case GameStates::Paused:
@@ -225,6 +261,14 @@ int main()
 			break;
 		}
 		case GameStates::GameOver:
+		{
+			window.draw(gameOverTxt1.getText());
+			window.draw(gameOverTxt2.getText());
+			window.draw(gameOverTxt3Counter.getText());
+			window.draw(gameOverTxt4.getText());
+			break;
+		}
+		case GameStates::Scored:
 		{
 			break;
 		}

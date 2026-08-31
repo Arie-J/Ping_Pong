@@ -29,6 +29,12 @@ public:
 	}
 	float getPosX() {return m_posX;}
 	float getPosY() {return m_posY;}
+	void setPosition(float x,float y) 
+	{
+		m_posX = x;
+		m_posY = y;
+	}
+	void resetScore(){ m_score = 0;}
 	sf::Vector2f getVelocity() {return m_velocity;}
 	
 private:

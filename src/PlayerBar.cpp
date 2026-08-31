@@ -1,8 +1,8 @@
 #include "PlayerBar.hpp"
 
 
-PlayerBar::PlayerBar(float width, float height, bool isOpponent)
-:	m_width{width}, m_height{height}, m_computer{isOpponent}
+PlayerBar::PlayerBar(float width, float height, bool isOpponent,float windowWidth)
+:	m_width{width}, m_height{height}, m_computer{isOpponent}, m_windowWidth{windowWidth}
 {
 }
 
@@ -19,7 +19,7 @@ sf::RectangleShape PlayerBar::createShape() const
 
 void PlayerBar::chase(Ball ball,sf::Time deltaTime,float opponentSpeed)
 {
-	if(m_computer)
+	if(m_computer && (ball.getPosX() > (m_windowWidth/2 - 30.f)))
 	{
 		float moveDistance {opponentSpeed*deltaTime.asSeconds()};
 		float deadZone{1.f};

@@ -8,7 +8,7 @@ class PlayerBar
 {
 public:
 
-	PlayerBar(float width, float height, bool isOpponent = false);
+	PlayerBar(float width, float height, bool isOpponent = false,float windowWidth = 0.f);
 
 	PlayerBar();
 
@@ -46,6 +46,7 @@ public:
 	}
 
 private:
+	float m_windowWidth{0.f};
 	float m_posX{100.f};
 	float m_posY{100.f};
 	float m_width{10.f};
