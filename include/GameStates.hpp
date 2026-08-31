@@ -4,4 +4,5 @@ enum class GameStates
     Paused,
     Playing,
     GameOver,
+    Scored
 };

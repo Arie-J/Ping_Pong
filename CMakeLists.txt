@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(SFML-Project LANGUAGES CXX)
+project(Ping-Pong LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,7 +20,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(main src/main.cpp
     src/PlayerBar.cpp
-    src/Ball.cpp)
+    src/Ball.cpp
+    src/MenuText.cpp)
 target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE SFML::Graphics)
 
