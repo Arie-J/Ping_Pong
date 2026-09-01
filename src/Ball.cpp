@@ -84,8 +84,8 @@ int Ball::score()
 		if(m_clock.getElapsedTime().asSeconds() > 1.f)
 		{
 			m_isWaiting = false;
-			int randCheckX = ((Random::get(-2,2) > 0 )?:1,-1);
-			int randCheckY = ((Random::get(-2,2) > 0 )?:1,-1);
+			int randCheckX = ((Random::get(-2,2) > 0 )?1:-1);
+			int randCheckY = ((Random::get(-2,2) > 0 )?1:-1);
 			int randintY = Random::get(100,300);
 			int randintX = std::sqrt(500*500 - randintY*randintY);
 			this -> giveVelocity({static_cast<float>(randCheckX*randintX),static_cast<float>(randCheckY*randintY)});
