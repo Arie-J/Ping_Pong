@@ -37,13 +37,13 @@ int main()
 
 	//loading some fonts.
 	sf::Font font1;
-    if (!font1.openFromFile("../../resources/FastelarDemoRegular.ttf")) 
+    if (!font1.openFromFile(RESOURCE_PATH "FastelarDemoRegular.ttf")) 
     {
         std::cout << "Error loading font!" << "\n";
         return -1;
     }
 	sf::Font font2;
-    if (!font2.openFromFile("../../resources/Playful_time_font.ttf")) 
+    if (!font2.openFromFile(RESOURCE_PATH "Playful_time_font.ttf")) 
     {
         std::cout << "Error loading font!" << "\n";
         return -1;
